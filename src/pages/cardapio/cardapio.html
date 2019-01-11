@@ -1,12 +1,151 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>cardapio</ion-title>
+    <ion-title>Cardápio</ion-title>
   </ion-navbar>
 
+  <ion-segment [(ngModel)]="diaSemana">
+    <ion-segment-button value="DOM">DOM</ion-segment-button>
+    <ion-segment-button value="SEG">SEG</ion-segment-button>
+    <ion-segment-button value="TER">TER</ion-segment-button>
+    <ion-segment-button value="QUA">QUA</ion-segment-button>
+    <ion-segment-button value="QUI">QUI</ion-segment-button>
+    <ion-segment-button value="SEX">SEX</ion-segment-button>
+    <ion-segment-button value="SAB">SAB</ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div [ngSwitch]="diaSemana">
+    <ion-list *ngSwitchCase="'DOM'">
+      <ion-item *ngFor="let item of domigo">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'SEG'">
+      <ion-item *ngFor="let item of segunda">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'TER'">
+      <ion-item *ngFor="let item of terca">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'QUA'">
+      <ion-item *ngFor="let item of quarta">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'QUI'">
+      <ion-item *ngFor="let item of quinta">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'SEX'">
+      <ion-item *ngFor="let item of sexta">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'SAB'">
+      <ion-item *ngFor="let item of sabado">
+        <h2>{{item.refeicao}}</h2>
+        <small>Prato</small>
+        <p>{{item.prato}}</p>
+        <small>Guarnição</small>
+        <p>{{item.guarnicao}}</p>
+        <small>Arroz</small>
+        <p>{{item.arroz}}</p>
+        <small>Feijão</small>
+        <p>{{item.feijao}}</p>
+        <small>Salada</small>
+        <p>{{item.salada}}</p>
+        <small>Sobremesa</small>
+        <p>{{item.sobremesa}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
 
 </ion-content>
