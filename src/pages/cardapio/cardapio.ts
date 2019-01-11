@@ -47,14 +47,6 @@ export class CardapioPage {
   }
 
   ionViewCanEnter() {
-    this.domigo = [];
-    this.segunda = [];
-    this.terca = [];
-    this.quarta = [];
-    this.quinta = [];
-    this.sexta = [];
-    this.sabado = [];
-
     this.getCardapio();
   }
 
@@ -62,9 +54,21 @@ export class CardapioPage {
     console.log('ionViewDidLoad CardapioPage');
   }
 
+  doRefresh(refresher) {
+    this.getCardapio();
+    refresher.complete();
+  }
+
   getCardapio() {
     console.log('Carregando cardápio');
     this.cardapioProvider.getCardapio().then((result: any) => {
+      this.domigo = [];
+      this.segunda = [];
+      this.terca = [];
+      this.quarta = [];
+      this.quinta = [];
+      this.sexta = [];
+      this.sabado = [];
       result.forEach(element => {
         switch (element['dia-semana']) {
           case 'Domingo':
