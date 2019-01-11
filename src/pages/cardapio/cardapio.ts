@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
 import { CardapioProvider } from '../../providers/cardapio/cardapio';
 
 @Component({
@@ -19,7 +20,7 @@ export class CardapioPage {
   private sabado: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private toast: ToastController, public cardapioProvider: CardapioProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private toast: ToastController, public cardapioProvider: CardapioProvider, private network: Network) {
 
     switch (new Date().getDay()) {
       case 0:
@@ -46,21 +47,17 @@ export class CardapioPage {
     }
   }
 
-  ionViewCanEnter() {
-    this.getCardapio();
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad CardapioPage');
   }
 
   doRefresh(refresher) {
-    this.getCardapio();
-    refresher.complete();
+    this.getCardapio(refresher);
   }
 
-  getCardapio() {
+  getCardapio(refresher?) {
     console.log('Carregando cardápio');
+
     this.cardapioProvider.getCardapio().then((result: any) => {
       this.domigo = [];
       this.segunda = [];
@@ -94,16 +91,32 @@ export class CardapioPage {
             break;
           default:
             let messageError: string = 'Erro ao pegar dados do cardápio';
-            console.log(messageError);
+            console.error(messageError);
             this.toast.create({ message: messageError, position: 'botton', duration: 3000 }).present();
         }
+
+        if (refresher) {
+          refresher.complete();
+        }
+
       });
     }).catch((error: any) => {
-      let messageError: string = 'Erro ao acessar API do cardápio';
-      console.log(messageError);
+
+      let messageError: string;
+
+      if (this.network.type === 'none') {
+        messageError = 'Erro de conexão com a internet';
+      } else {
+        messageError = 'Erro ao acessar API do cardápio';
+      }
+
+      console.error(messageError);
       this.toast.create({ message: messageError, position: 'botton', duration: 3000 }).present();
+
+      if (refresher) {
+        refresher.complete();
+      }
+
     });
   }
-
-
 }

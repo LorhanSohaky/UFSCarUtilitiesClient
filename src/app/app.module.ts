@@ -2,6 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { CacheModule } from 'ionic-cache';
 import { MyApp } from './app.component';
 
 import { BibliotecaPage } from '../pages/biblioteca/biblioteca';
@@ -12,7 +13,9 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 import { CardapioProvider } from '../providers/cardapio/cardapio';
+import { Network } from '@ionic-native/network';
 
 
 @NgModule({
@@ -27,6 +30,7 @@ import { CardapioProvider } from '../providers/cardapio/cardapio';
   imports: [
     BrowserModule,
     HttpClientModule,
+    CacheModule.forRoot({ keyPrefix: 'ufscar-utilities-cache' }),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -41,6 +45,7 @@ import { CardapioProvider } from '../providers/cardapio/cardapio';
   providers: [
     StatusBar,
     SplashScreen,
+    Network,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     CardapioProvider
   ]
