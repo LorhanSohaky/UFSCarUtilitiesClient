@@ -4,7 +4,7 @@ import { CacheService } from 'ionic-cache';
 
 @Injectable()
 export class CardapioProvider {
-  private API_URL: string = 'http://localhost:8080';
+  private API_URL: string = 'https://ufscar-utilities-server.herokuapp.com';
 
   constructor(public http: HttpClient, private cache: CacheService) {
     console.log('CardapioProvider Provider');
