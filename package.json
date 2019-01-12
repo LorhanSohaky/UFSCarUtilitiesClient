@@ -6,7 +6,7 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "start": "ionic-app-scripts serve",
+    "start": "node server.js",
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "postinstall": "npm run build",
