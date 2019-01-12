@@ -21,6 +21,7 @@ export class CardapioPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private toast: ToastController, public cardapioProvider: CardapioProvider, private network: Network) {
+    this.getCardapio();
 
     switch (new Date().getDay()) {
       case 0:
