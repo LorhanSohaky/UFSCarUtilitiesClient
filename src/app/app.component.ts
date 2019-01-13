@@ -7,6 +7,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { CacheService } from 'ionic-cache';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoginPage } from '../pages/login/login';
+import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
 
 @Component({
   templateUrl: 'app.html'
@@ -19,7 +20,7 @@ export class MyApp {
     const authObserver = afAuth.authState.subscribe((user) => {
       if (user) {
         console.log(user);
-        this.rootPage = TabsPage;
+        this.rootPage = SigaAuthPage;
         authObserver.unsubscribe();
       } else {
         this.rootPage = LoginPage;

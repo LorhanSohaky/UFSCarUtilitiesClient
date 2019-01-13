@@ -10,6 +10,8 @@ import { CardapioPage } from '../pages/cardapio/cardapio';
 import { SigaPage } from '../pages/siga/siga';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { LoginPage } from '../pages/login/login';
+import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,9 +21,12 @@ import { Network } from '@ionic-native/network';
 import { FIREBASE_CONFIG } from './app.firebase.config';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { LoginPage } from '../pages/login/login';
+import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
+
 import { AuthProvider } from '../providers/auth/auth';
-import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
+import { DatabaseProvider } from '../providers/database/database';
+import { CryptoProvider } from '../providers/crypto/crypto';
+
 
 
 
@@ -41,6 +46,7 @@ import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
     HttpClientModule,
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     CacheModule.forRoot({ keyPrefix: 'ufscar-utilities-cache' }),
     IonicModule.forRoot(MyApp)
   ],
@@ -59,9 +65,12 @@ import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
     StatusBar,
     SplashScreen,
     Network,
+    AngularFireDatabase,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     CardapioProvider,
-    AuthProvider
+    AuthProvider,
+    DatabaseProvider,
+    CryptoProvider
   ]
 })
 
