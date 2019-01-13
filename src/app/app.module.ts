@@ -16,11 +16,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { CardapioProvider } from '../providers/cardapio/cardapio';
 import { Network } from '@ionic-native/network';
+import { FIREBASE_CONFIG } from './app.firebase.config';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { LoginPage } from '../pages/login/login';
+import { AuthProvider } from '../providers/auth/auth';
+
 
 
 @NgModule({
   declarations: [
     MyApp,
+    LoginPage,
     BibliotecaPage,
     CardapioPage,
     SigaPage,
@@ -30,12 +37,15 @@ import { Network } from '@ionic-native/network';
   imports: [
     BrowserModule,
     HttpClientModule,
+    AngularFireModule.initializeApp(FIREBASE_CONFIG),
+    AngularFireAuthModule,
     CacheModule.forRoot({ keyPrefix: 'ufscar-utilities-cache' }),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LoginPage,
     BibliotecaPage,
     CardapioPage,
     SigaPage,
@@ -47,7 +57,8 @@ import { Network } from '@ionic-native/network';
     SplashScreen,
     Network,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    CardapioProvider
+    CardapioProvider,
+    AuthProvider
   ]
 })
 
