@@ -12,7 +12,7 @@ import { LoginPage } from '../pages/login/login';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = LoginPage;
+  rootPage: any;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, afAuth: AngularFireAuth) {
     afAuth.auth.useDeviceLanguage();
