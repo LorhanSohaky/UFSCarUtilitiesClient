@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Acessar</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form #form="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Número do celular</ion-label>
+        <ion-input type="tel" name="phone" [ngModel]="phone" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button block color="primary" [disabled]="!form.form.valid" (click)="sendCode()">Sign In</button>
+    </div>
+
+    <div id="recaptcha-container" required></div>
+  </form>
+</ion-content>
