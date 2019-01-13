@@ -21,6 +21,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { LoginPage } from '../pages/login/login';
 import { AuthProvider } from '../providers/auth/auth';
+import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
 
 
 
@@ -28,6 +29,7 @@ import { AuthProvider } from '../providers/auth/auth';
   declarations: [
     MyApp,
     LoginPage,
+    SigaAuthPage,
     BibliotecaPage,
     CardapioPage,
     SigaPage,
@@ -46,6 +48,7 @@ import { AuthProvider } from '../providers/auth/auth';
   entryComponents: [
     MyApp,
     LoginPage,
+    SigaAuthPage,
     BibliotecaPage,
     CardapioPage,
     SigaPage,

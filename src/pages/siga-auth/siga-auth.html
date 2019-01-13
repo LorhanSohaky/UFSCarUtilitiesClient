@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Autenticação no SIGA</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <form #form="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Número do RA</ion-label>
+        <ion-input type="text" [(ngModel)]="ra" (blur)="ra = format(ra)" (keypress)="ra = format(ra)" name="ra"
+          maxlength="6" minlength="6" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Senha do SIGA</ion-label>
+        <ion-input type="password" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button block color="primary" [disabled]="!form.form.valid" (click)="login()">Acessar</button>
+    </div>
+
+    <div id="recaptcha-container" required></div>
+  </form>
+</ion-content>
