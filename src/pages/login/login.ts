@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController, LoadingController, Loading } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { NgForm } from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
@@ -14,16 +14,42 @@ export class LoginPage {
 
   @ViewChild('form') private form: NgForm;
 
-  phone: string;
+  private phone: string;
+  private widgetId: boolean;
+  private loading: Loading
 
   appVerifier: firebase.auth.RecaptchaVerifier;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthProvider, private alertCtrl: AlertController, private toast: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthProvider, private alertCtrl: AlertController, private toast: ToastController, public loadingCtrl: LoadingController) {
+    this.widgetId = false;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    this.presentLoading();
     this.appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    this.appVerifier.render().then(value => {
+      this.loading.dismiss();
+    }).catch(() => {
+      let toast = this.toast.create({ duration: 3000, position: 'bottom' });
+      toast.setMessage('Erro ao carregar');
+      this.loading.dismiss();
+      toast.dismiss();
+    });
+
+    this.appVerifier.verify().then(() => {
+      this.widgetId = true;
+    }).catch(() => {
+      this.widgetId = false;
+    });
+  }
+
+  presentLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Carregando...'
+    });
+
+    this.loading.present();
   }
 
   sendCode() {

@@ -17,7 +17,7 @@
     </ion-list>
 
     <div padding>
-      <button ion-button block color="primary" [disabled]="!form.form.valid" (click)="sendCode()">Sign In</button>
+      <button ion-button block color="primary" [disabled]="!form.form.valid || !widgetId" (click)="sendCode()">Acessar</button>
     </div>
 
     <div id="recaptcha-container" required></div>
