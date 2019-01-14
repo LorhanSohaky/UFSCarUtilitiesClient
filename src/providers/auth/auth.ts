@@ -17,7 +17,7 @@ export class AuthProvider {
     return this.afAuth.auth.signInWithPhoneNumber(phoneNumber, appVerifier);
   }
 
-  getUser() {
+  getAuthState() {
     return this.afAuth.authState;
   }
 

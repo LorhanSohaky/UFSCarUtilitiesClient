@@ -27,6 +27,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import { DatabaseProvider } from '../providers/database/database';
 import { CryptoProvider } from '../providers/crypto/crypto';
 import { SigaProvider } from '../providers/siga/siga';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 
@@ -48,7 +49,11 @@ import { SigaProvider } from '../providers/siga/siga';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    CacheModule.forRoot({ keyPrefix: 'ufscar-utilities-cache' }),
+    IonicStorageModule.forRoot({
+      name: 'ufscar-utilities',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
+    CacheModule.forRoot({ keyPrefix: 'cache' }),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

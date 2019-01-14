@@ -10,6 +10,7 @@ export class DatabaseProvider {
   }
 
   addUserInformation(uid: string, user: User) {
+    console.log(user);
     return new Promise((resolve, reject) => {
       this.database.database.ref('users/' + uid).set(user).then(() => {
         resolve();
@@ -19,14 +20,15 @@ export class DatabaseProvider {
     });
   }
 
-  getUserInformation(uid: string) {
-    return new Promise((resolve, reject) => {
-      this.database.database.ref('users/' + uid).once('value').then((data) => {
-        resolve(data.val());
-      }).catch((error) => {
-        reject(error);
-      });
+  async existsKey(uid: string): Promise<boolean> {
+    let result: boolean;
+    await this.database.database.ref('users/' + uid).once('value').then(() => {
+      result = true;
+    }).catch(() => {
+      result = false;
     });
+
+    return result;
   }
 
 }

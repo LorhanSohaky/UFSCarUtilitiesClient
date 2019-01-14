@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, AlertController, ToastController, LoadingController, Loading } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { NgForm } from '@angular/forms';
-import { TabsPage } from '../tabs/tabs';
 import * as firebase from 'firebase/app';
+import { SigaPage } from '../siga/siga';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class LoginPage {
 
   appVerifier: firebase.auth.RecaptchaVerifier;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthProvider, private alertCtrl: AlertController, private toast: ToastController, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthProvider, private alertCtrl: AlertController, private toast: ToastController, public loadingCtrl: LoadingController, private storage: Storage) {
     this.widgetId = false;
   }
 
@@ -74,8 +75,8 @@ export class LoginPage {
                 handler: data => {
                   confirmationResult.confirm(data.codigo)
                     .then((result) => {
-
-                      this.navCtrl.setRoot(TabsPage);
+                      this.storage.set('step', 'siga');
+                      this.navCtrl.setRoot(SigaPage);
 
                     }).catch((error) => {
 

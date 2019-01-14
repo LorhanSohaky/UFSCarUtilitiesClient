@@ -28,7 +28,7 @@ export class SigaAuthPage {
     this.user = new User();
     console.log('ionViewDidLoad SigaAuthPage');
 
-    this.auth.getUser().subscribe((value) => {
+    this.auth.getAuthState().subscribe((value) => {
       if (value) {
         this.uid = value.uid;
       } else {
