@@ -26,6 +26,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/da
 import { AuthProvider } from '../providers/auth/auth';
 import { DatabaseProvider } from '../providers/database/database';
 import { CryptoProvider } from '../providers/crypto/crypto';
+import { SigaProvider } from '../providers/siga/siga';
 
 
 
@@ -70,7 +71,8 @@ import { CryptoProvider } from '../providers/crypto/crypto';
     CardapioProvider,
     AuthProvider,
     DatabaseProvider,
-    CryptoProvider
+    CryptoProvider,
+    SigaProvider
   ]
 })
 
