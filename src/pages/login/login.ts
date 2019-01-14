@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { NgForm } from '@angular/forms';
 import * as firebase from 'firebase/app';
-import { SigaPage } from '../siga/siga';
+import { SigaAuthPage } from '../siga-auth/siga-auth';
 
 
 @Component({
@@ -76,7 +76,7 @@ export class LoginPage {
                   confirmationResult.confirm(data.codigo)
                     .then((result) => {
                       this.storage.set('step', 'siga');
-                      this.navCtrl.setRoot(SigaPage);
+                      this.navCtrl.setRoot(SigaAuthPage);
 
                     }).catch((error) => {
 
