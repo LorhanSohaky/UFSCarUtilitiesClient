@@ -19,4 +19,14 @@ export class DatabaseProvider {
     });
   }
 
+  getUserInformation(uid: string) {
+    return new Promise((resolve, reject) => {
+      this.database.database.ref('users/' + uid).once('value').then((data) => {
+        resolve(data.val());
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
+
 }

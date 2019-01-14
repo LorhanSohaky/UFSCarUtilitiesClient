@@ -8,6 +8,8 @@ import { CacheService } from 'ionic-cache';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoginPage } from '../pages/login/login';
 import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
+import { AuthProvider } from '../providers/auth/auth';
+import { DatabaseProvider } from '../providers/database/database';
 
 @Component({
   templateUrl: 'app.html'
@@ -15,12 +17,18 @@ import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
 export class MyApp {
   rootPage: any;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, afAuth: AngularFireAuth) {
-    afAuth.auth.useDeviceLanguage();
-    const authObserver = afAuth.authState.subscribe((user) => {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, auth: AuthProvider, database: DatabaseProvider) {
+    const authObserver = auth.getUser().subscribe((user) => {
       if (user) {
-        console.log(user);
-        this.rootPage = SigaAuthPage;
+        database.getUserInformation(user.uid).then((value) => {
+          if (value) {
+            this.rootPage = TabsPage;
+          } else {
+            this.rootPage = SigaAuthPage;
+          }
+        }).catch(() => {
+          this.rootPage = LoginPage;
+        })
         authObserver.unsubscribe();
       } else {
         this.rootPage = LoginPage;
