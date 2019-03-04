@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { CardapioProvider } from '../../providers/cardapio/cardapio';
+import { Refeicao } from '../../models/refeicao';
 
 @Component({
   selector: 'page-cardapio',
@@ -11,44 +12,21 @@ export class CardapioPage {
 
   private diaSemana: string;
 
-  private domigo: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private segunda: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private terca: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private quarta: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private quinta: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private sexta: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
-  private sabado: Array<{ 'data': string, 'dia-semana': string, 'refeicao': string, 'prato': string, 'guarnicao': string, 'arroz': string, 'feijao': string, 'salada': string, 'sobremesa': string }>;
+  private domigo: Array<Refeicao>;
+  private segunda: Array<Refeicao>;
+  private terca: Array<Refeicao>;
+  private quarta: Array<Refeicao>;
+  private quinta: Array<Refeicao>;
+  private sexta: Array<Refeicao>;
+  private sabado: Array<Refeicao>;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private toast: ToastController, public cardapioProvider: CardapioProvider, private network: Network) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private toast: ToastController, private cardapioProvider: CardapioProvider, private network: Network) {
 
-    switch (new Date().getDay()) {
-      case 0:
-        this.diaSemana = 'DOM';
-        break;
-      case 1:
-        this.diaSemana = 'SEG';
-        break;
-      case 2:
-        this.diaSemana = 'TER';
-        break;
-      case 3:
-        this.diaSemana = 'QUA';
-        break;
-      case 4:
-        this.diaSemana = 'QUI';
-        break;
-      case 5:
-        this.diaSemana = 'SEX';
-        break;
-      case 6:
-        this.diaSemana = 'SAB';
-        break;
-    }
+
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CardapioPage');
     this.getCardapio();
   }
 
@@ -57,67 +35,95 @@ export class CardapioPage {
   }
 
   getCardapio(refresher?) {
-    console.log('Carregando cardápio');
+    this.diaSemana = this.getDiaAtual();
 
-    this.cardapioProvider.getCardapio().then((result: any) => {
-      this.domigo = [];
-      this.segunda = [];
-      this.terca = [];
-      this.quarta = [];
-      this.quinta = [];
-      this.sexta = [];
-      this.sabado = [];
-      result.forEach(element => {
-        switch (element['dia-semana']) {
-          case 'Domingo':
-            this.domigo.push(element);
-            break;
-          case 'Segunda-feira':
-            this.segunda.push(element);
-            break;
-          case 'Terça-feira':
-            this.terca.push(element);
-            break;
-          case 'Quarta-feira':
-            this.quarta.push(element);
-            break;
-          case 'Quinta-feira':
-            this.quinta.push(element);
-            break;
-          case 'Sexta-feira':
-            this.sexta.push(element);
-            break;
-          case 'Sábado':
-            this.sabado.push(element);
-            break;
-          default:
-            let messageError: string = 'Erro ao pegar dados do cardápio';
-            console.error(messageError);
-            this.toast.create({ message: messageError, position: 'botton', duration: 3000 }).present();
-        }
+    this.cardapioProvider.getCardapio()
+      .subscribe(
+        (response: Refeicao[]) => {
+          try {
+            this.organizarRefeicoesPorDiaDaSemana(response);
+          } catch (error) {
+            console.error(error);
+            this.toast.create({ message: error, position: 'botton', duration: 3000 }).present();
+          }
 
-        if (refresher) {
-          refresher.complete();
-        }
+          if (refresher) {
+            refresher.complete();
+          }
+        }), ((error: any) => {
 
-      });
-    }).catch((error: any) => {
+          let messageError: string;
 
-      let messageError: string;
+          if (this.network.type === 'none') {
+            messageError = 'Falha de conexão com a internet!';
+          } else {
+            messageError = 'Erro ao acessar API do cardápio!';
+          }
 
-      if (this.network.type === 'none') {
-        messageError = 'Erro de conexão com a internet';
-      } else {
-        messageError = 'Erro ao acessar API do cardápio';
+          console.error(messageError);
+          this.toast.create({ message: messageError, position: 'botton', duration: 3000 }).present();
+
+          if (refresher) {
+            refresher.complete();
+          }
+
+        });
+  }
+
+  organizarRefeicoesPorDiaDaSemana(refeicoes: Refeicao[]) {
+    this.domigo = [];
+    this.segunda = [];
+    this.terca = [];
+    this.quarta = [];
+    this.quinta = [];
+    this.sexta = [];
+    this.sabado = [];
+
+    refeicoes.forEach(refeicao => {
+      switch (refeicao['dia-semana']) {
+        case 'Domingo':
+          this.domigo.push(refeicao);
+          break;
+        case 'Segunda-feira':
+          this.segunda.push(refeicao);
+          break;
+        case 'Terça-feira':
+          this.terca.push(refeicao);
+          break;
+        case 'Quarta-feira':
+          this.quarta.push(refeicao);
+          break;
+        case 'Quinta-feira':
+          this.quinta.push(refeicao);
+          break;
+        case 'Sexta-feira':
+          this.sexta.push(refeicao);
+          break;
+        case 'Sábado':
+          this.sabado.push(refeicao);
+          break;
+        default:
+          throw new Error('Erro ao pegar dados do cardápio, por favor entre em contato com os desenvolvedores');
       }
-
-      console.error(messageError);
-      this.toast.create({ message: messageError, position: 'botton', duration: 3000 }).present();
-
-      if (refresher) {
-        refresher.complete();
-      }
-
     });
+  }
+
+  getDiaAtual() {
+    switch (new Date().getDay()) {
+      case 0:
+        return 'DOM';
+      case 1:
+        return 'SEG';
+      case 2:
+        return 'TER';
+      case 3:
+        return 'QUA';
+      case 4:
+        return 'QUI';
+      case 5:
+        return 'SEX';
+      case 6:
+        return 'SAB';
+    }
   }
 }

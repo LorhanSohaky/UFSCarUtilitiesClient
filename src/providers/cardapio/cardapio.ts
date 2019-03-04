@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CacheService } from 'ionic-cache';
+import { Refeicao } from '../../models/refeicao';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CardapioProvider {
@@ -10,16 +12,9 @@ export class CardapioProvider {
     console.log('CardapioProvider Provider');
   }
 
-  getCardapio() {
-    return new Promise((resolve, reject) => {
-      let url: string = this.API_URL + '/cardapio';
-      let request = this.http.get(url);
-      this.cache.loadFromObservable('jsonCardapio', request).subscribe((result: any) => {
-        resolve(result);
-      }, (error) => {
-        reject(error);
-      });
-    });
+  getCardapio(): Observable<Refeicao[]> {
+    const url: string = this.API_URL + '/cardapio';
+    return this.cache.loadFromObservable('jsonCardapio', this.http.get(url));
   }
 
 }
