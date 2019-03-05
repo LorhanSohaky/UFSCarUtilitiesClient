@@ -1,13 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
-import { LoginPage } from '../login/login';
-import { DatabaseProvider } from '../../providers/database/database';
+import { Network } from '@ionic-native/network';
 import { User } from '../../providers/database/user';
 import { CryptoProvider } from '../../providers/crypto/crypto';
+import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs/tabs';
 import { AuthProvider } from '../../providers/auth/auth';
+import { DatabaseProvider } from '../../providers/database/database';
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-siga-auth',
@@ -20,19 +21,23 @@ export class SigaAuthPage {
   private password: string;
   private uid: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private database: DatabaseProvider, private auth: AuthProvider, private storage: Storage, private toast: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private network: Network, private toast: ToastController, private auth: AuthProvider, private storage: Storage, private database: DatabaseProvider) {
     this.user = new User();
   }
 
   ionViewDidLoad() {
-    this.user = new User();
-    console.log('ionViewDidLoad SigaAuthPage');
 
-    this.auth.getAuthState().subscribe((value) => {
-      if (value) {
-        this.uid = value.uid;
+    if (this.network.type == 'none') {
+      this.toast.create({ message: 'É necessário estar conectado com a internet', position: 'botton', duration: 3000 }).present();
+    }
+
+    this.auth.getAuthState().subscribe((user) => {
+      if (user) {
+        this.uid = user.uid;
       } else {
         this.uid = null;
+        this.storage.set('step', 'login');
         this.navCtrl.setRoot(LoginPage);
       }
     });
@@ -56,6 +61,7 @@ export class SigaAuthPage {
       let encrypted = CryptoProvider.encrypt(this.password, this.user.key);
 
       this.database.addUserInformation(this.uid, this.user).then(() => {
+        this.storage.set('step', 'tabs');
         this.storage.set('siga', encrypted);
         this.navCtrl.setRoot(TabsPage);
       }).catch((error) => {
