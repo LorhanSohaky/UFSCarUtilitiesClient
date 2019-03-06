@@ -63,6 +63,7 @@ export class SigaAuthPage {
       this.database.addUserInformation(this.uid, this.user).then(() => {
         this.storage.set('step', 'tabs');
         this.storage.set('siga', encrypted);
+        this.storage.set('ra', this.user.ra);
         this.navCtrl.setRoot(TabsPage);
       }).catch((error) => {
         console.error(error);

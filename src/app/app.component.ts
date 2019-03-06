@@ -17,6 +17,10 @@ import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
 export class MyApp {
   rootPage: any;
 
+  readonly API_URL = 'https://ufscar-utilities-server.herokuapp.com/';
+
+  private avatarURL: string;
+
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, private auth: AuthProvider, private storage: Storage, private network: Network) {
 
 
@@ -28,13 +32,13 @@ export class MyApp {
       cache.setOfflineInvalidate(false);
 
       statusBar.styleDefault();
-      this.setRootPage().then(() => {
+      this.setRootPageAndLoadAvatar().then(() => {
         splashScreen.hide();
       })
     });
   }
 
-  setRootPage() {
+  setRootPageAndLoadAvatar() {
     return this.auth.getPage()
       .then(page => {
         let nextPage = this.getPage(page)
@@ -44,10 +48,12 @@ export class MyApp {
               this.rootPage = LoginPage;
               this.storage.set('step', 'login');
             } else {
+              this.getAvatar();
               this.rootPage = nextPage;
             }
           });
         } else {
+          this.getAvatar();
           this.rootPage = nextPage;
         }
       })
@@ -66,6 +72,12 @@ export class MyApp {
       case 'siga':
         return SigaAuthPage
     }
+  }
+
+  getAvatar() {
+    this.storage.get('ra').then(ra => {
+      this.avatarURL = this.API_URL + 'foto/' + ra;
+    });
   }
 
 }
