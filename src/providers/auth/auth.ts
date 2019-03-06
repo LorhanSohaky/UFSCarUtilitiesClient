@@ -31,4 +31,9 @@ export class AuthProvider {
         return 'login';
       });
   }
+
+  logOut() {
+    this.afAuth.auth.signOut();
+    this.storage.clear();
+  }
 }

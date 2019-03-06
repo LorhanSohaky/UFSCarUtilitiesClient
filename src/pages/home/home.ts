@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoginPage } from '../login/login';
+import { AuthProvider } from '../../providers/auth/auth';
 
 @Component({
   selector: 'page-home',
@@ -9,7 +10,7 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, private auth: AuthProvider) {
 
   }
 
@@ -18,7 +19,7 @@ export class HomePage {
   }
 
   logOut() {
-    this.afAuth.auth.signOut();
+    this.auth.logOut();
     this.navCtrl.setRoot(LoginPage);
   }
 
