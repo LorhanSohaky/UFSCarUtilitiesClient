@@ -1,1 +1,22 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content" side="end">
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-5>
+                        <ion-avatar>
+                            <img src="../assets/imgs/logo.png">
+                        </ion-avatar>
+                    </ion-col>
+                    <ion-col col-7>
+                        <p class="name">Lorhan Sohaky</p>
+                        <p class="ira">IRA 19720</p>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-toolbar>
+    </ion-header>
+</ion-menu>
+
+<ion-nav [root]=" rootPage" #content>
+</ion-nav>
