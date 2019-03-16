@@ -27,6 +27,7 @@ export class CardapioPage {
   }
 
   ionViewDidLoad() {
+    this.diaSemana = this.getDiaAtual();
     this.getCardapio();
   }
 
@@ -35,8 +36,6 @@ export class CardapioPage {
   }
 
   getCardapio(refresher?) {
-    this.diaSemana = this.getDiaAtual();
-
     this.cardapioProvider.getCardapio()
       .subscribe(
         (response: Refeicao[]) => {
