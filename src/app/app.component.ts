@@ -32,28 +32,26 @@ export class MyApp {
       cache.setOfflineInvalidate(false);
 
       statusBar.styleDefault();
-      this.setRootPageAndLoadAvatar();
-      splashScreen.hide();
+      this.setRootPageAndLoadAvatar().then(() => {
+        splashScreen.hide();
+      });
     });
   }
 
   async setRootPageAndLoadAvatar() {
-    this.storage.getStep();
     this.getAvatar();
+
+    if (this.network.type != 'none') {
+      this.auth.getAuthState().subscribe(user => {
+        if (!user) {
+          this.storage.setStep('login');
+        }
+      });
+    }
+
+    this.storage.getStep();
     this.events.subscribe('storage:step', page => {
-      let nextPage = this.getPage(page)
-      if (this.network.type != 'none') {
-        this.auth.getAuthState().subscribe(user => {
-          if (!user) {
-            this.rootPage = LoginPage;
-            this.storage.setStep('login');
-          } else {
-            this.rootPage = nextPage;
-          }
-        });
-      } else {
-        this.rootPage = nextPage;
-      }
+      this.rootPage = this.getPage(page);
     });
   }
 
