@@ -4,10 +4,8 @@ import { NgForm } from '@angular/forms';
 import { Network } from '@ionic-native/network';
 import { User } from '../../providers/database/user';
 import { CryptoProvider } from '../../providers/crypto/crypto';
-import { LoginPage } from '../login/login';
 import { AuthProvider } from '../../providers/auth/auth';
 import { DatabaseProvider } from '../../providers/database/database';
-import { TabsPage } from '../tabs/tabs';
 import { StorageProvider } from '../../providers/storage/storage';
 
 @Component({
@@ -22,7 +20,7 @@ export class SigaAuthPage {
   private uid: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private network: Network, private toast: ToastController,
-              private auth: AuthProvider, private storage: StorageProvider, private database: DatabaseProvider) {
+    private auth: AuthProvider, private storage: StorageProvider, private database: DatabaseProvider) {
     this.user = new User();
   }
 
