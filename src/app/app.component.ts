@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -10,6 +10,7 @@ import { LoginPage } from '../pages/login/login';
 import { AuthProvider } from '../providers/auth/auth';
 import { TabsPage } from '../pages/tabs/tabs';
 import { SigaAuthPage } from '../pages/siga-auth/siga-auth';
+import { StorageProvider } from '../providers/storage/storage';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,7 +22,7 @@ export class MyApp {
 
   private avatarURL: string;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, private auth: AuthProvider, private storage: Storage, private network: Network) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, private auth: AuthProvider, private storage: Storage, private network: Network, private storageProvider: StorageProvider, private events: Events) {
 
 
     platform.ready().then(() => {
@@ -75,8 +76,11 @@ export class MyApp {
   }
 
   getAvatar() {
-    this.storage.get('ra').then(ra => {
-      this.avatarURL = this.API_URL + 'foto/' + ra;
+    this.storageProvider.getRA();
+    this.events.subscribe('storage:ra', (ra) => {
+      if (ra) {
+        this.avatarURL = this.API_URL + 'foto/' + ra;
+      }
     });
   }
 

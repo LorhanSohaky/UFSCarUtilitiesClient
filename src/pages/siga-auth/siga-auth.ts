@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { DatabaseProvider } from '../../providers/database/database';
 import { TabsPage } from '../tabs/tabs';
+import { StorageProvider } from '../../providers/storage/storage';
 
 @Component({
   selector: 'page-siga-auth',
@@ -22,7 +23,7 @@ export class SigaAuthPage {
   private uid: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private network: Network, private toast: ToastController, private auth: AuthProvider, private storage: Storage, private database: DatabaseProvider) {
+    private network: Network, private toast: ToastController, private auth: AuthProvider, private storage: Storage, private database: DatabaseProvider, private storageProvider: StorageProvider) {
     this.user = new User();
   }
 
@@ -63,7 +64,7 @@ export class SigaAuthPage {
       this.database.addUserInformation(this.uid, this.user).then(() => {
         this.storage.set('step', 'tabs');
         this.storage.set('siga', encrypted);
-        this.storage.set('ra', this.user.ra);
+        this.storageProvider.setRA(this.user.ra);
         this.navCtrl.setRoot(TabsPage);
       }).catch((error) => {
         console.error(error);

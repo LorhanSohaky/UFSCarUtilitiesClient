@@ -28,6 +28,7 @@ import { DatabaseProvider } from '../providers/database/database';
 import { CryptoProvider } from '../providers/crypto/crypto';
 import { SigaProvider } from '../providers/siga/siga';
 import { IonicStorageModule } from '@ionic/storage';
+import { StorageProvider } from '../providers/storage/storage';
 
 
 
@@ -77,7 +78,8 @@ import { IonicStorageModule } from '@ionic/storage';
     AuthProvider,
     DatabaseProvider,
     CryptoProvider,
-    SigaProvider
+    SigaProvider,
+    StorageProvider
   ]
 })
 
