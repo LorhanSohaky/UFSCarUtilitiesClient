@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 
 import { CacheService } from 'ionic-cache';
@@ -22,7 +21,7 @@ export class MyApp {
 
   private avatarURL: string;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, private auth: AuthProvider, private storage: Storage, private network: Network, private storageProvider: StorageProvider, private events: Events) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, cache: CacheService, private auth: AuthProvider, private network: Network, private storage: StorageProvider, private events: Events) {
 
 
     platform.ready().then(() => {
@@ -33,21 +32,20 @@ export class MyApp {
       cache.setOfflineInvalidate(false);
 
       statusBar.styleDefault();
-      this.setRootPageAndLoadAvatar().then(() => {
-        splashScreen.hide();
-      })
+      this.setRootPageAndLoadAvatar();
+      splashScreen.hide();
     });
   }
 
-  setRootPageAndLoadAvatar() {
-    return this.auth.getPage()
-      .then(page => {
-        let nextPage = this.getPage(page)
+  async setRootPageAndLoadAvatar() {
+    this.storage.getStep();
+    this.events.subscribe('storage:step',page=>{
+      let nextPage = this.getPage(page)
         if (this.network.type != 'none') {
           this.auth.getAuthState().subscribe(user => {
             if (!user) {
               this.rootPage = LoginPage;
-              this.storage.set('step', 'login');
+              this.storage.setStep('login');
             } else {
               this.getAvatar();
               this.rootPage = nextPage;
@@ -57,11 +55,7 @@ export class MyApp {
           this.getAvatar();
           this.rootPage = nextPage;
         }
-      })
-      .catch(error => {
-        console.error('Erro inesperado');
-        this.rootPage = LoginPage;
-      });
+    });
   }
 
   getPage(page: string) {
@@ -76,7 +70,7 @@ export class MyApp {
   }
 
   getAvatar() {
-    this.storageProvider.getRA();
+    this.storage.getRA();
     this.events.subscribe('storage:ra', (ra) => {
       if (ra) {
         this.avatarURL = this.API_URL + 'foto/' + ra;

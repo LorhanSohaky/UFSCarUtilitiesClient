@@ -5,7 +5,6 @@ import { Network } from '@ionic-native/network';
 import { User } from '../../providers/database/user';
 import { CryptoProvider } from '../../providers/crypto/crypto';
 import { LoginPage } from '../login/login';
-import { Storage } from '@ionic/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { DatabaseProvider } from '../../providers/database/database';
 import { TabsPage } from '../tabs/tabs';
@@ -22,8 +21,8 @@ export class SigaAuthPage {
   private password: string;
   private uid: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    private network: Network, private toast: ToastController, private auth: AuthProvider, private storage: Storage, private database: DatabaseProvider, private storageProvider: StorageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private network: Network, private toast: ToastController,
+              private auth: AuthProvider, private storage: StorageProvider, private database: DatabaseProvider) {
     this.user = new User();
   }
 
@@ -38,8 +37,7 @@ export class SigaAuthPage {
         this.uid = user.uid;
       } else {
         this.uid = null;
-        this.storage.set('step', 'login');
-        this.navCtrl.setRoot(LoginPage);
+        this.storage.setStep('login');
       }
     });
   }
@@ -62,10 +60,9 @@ export class SigaAuthPage {
       let encrypted = CryptoProvider.encrypt(this.password, this.user.key);
 
       this.database.addUserInformation(this.uid, this.user).then(() => {
-        this.storage.set('step', 'tabs');
-        this.storage.set('siga', encrypted);
-        this.storageProvider.setRA(this.user.ra);
-        this.navCtrl.setRoot(TabsPage);
+        this.storage.setStep('tabs');
+        this.storage.setSiga(encrypted);
+        this.storage.setRA(this.user.ra);
       }).catch((error) => {
         console.error(error);
         toast.setMessage('Erro: ' + error);

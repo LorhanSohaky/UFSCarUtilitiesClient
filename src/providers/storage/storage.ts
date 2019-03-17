@@ -21,4 +21,37 @@ export class StorageProvider {
         this.events.publish('storage:ra', ra);
     }
 
+    async getStep() {
+        let step = await this.storage.get('step');
+        if (!step) {
+            step = 'login';
+        }
+        this.events.publish('storage:step', step);
+    }
+
+    setStep(step: string) {
+        if (step != 'login' && step != 'siga' && step != 'tabs') {
+            throw ('Step inválido');
+        }
+
+        this.storage.set('step', step);
+        this.events.publish('storage:step', step);
+    }
+
+    async getSiga() {
+        let siga = await this.storage.get('siga');
+        this.events.publish('storage:siga', siga);
+    }
+
+    setSiga(siga: string) {
+        this.storage.set('siga', siga);
+        this.events.publish('storage:siga', siga);
+    }
+
+    clear() {
+        this.storage.remove('siga');
+    }
+
+
+
 }
