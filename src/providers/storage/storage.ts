@@ -24,7 +24,8 @@ export class StorageProvider {
     async getStep() {
         let step = await this.storage.get('step');
         if (!step) {
-            step = 'login';
+            this.setStep('login');
+            return;
         }
         this.events.publish('storage:step', step);
     }

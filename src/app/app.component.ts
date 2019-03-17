@@ -39,22 +39,21 @@ export class MyApp {
 
   async setRootPageAndLoadAvatar() {
     this.storage.getStep();
-    this.events.subscribe('storage:step',page=>{
+    this.getAvatar();
+    this.events.subscribe('storage:step', page => {
       let nextPage = this.getPage(page)
-        if (this.network.type != 'none') {
-          this.auth.getAuthState().subscribe(user => {
-            if (!user) {
-              this.rootPage = LoginPage;
-              this.storage.setStep('login');
-            } else {
-              this.getAvatar();
-              this.rootPage = nextPage;
-            }
-          });
-        } else {
-          this.getAvatar();
-          this.rootPage = nextPage;
-        }
+      if (this.network.type != 'none') {
+        this.auth.getAuthState().subscribe(user => {
+          if (!user) {
+            this.rootPage = LoginPage;
+            this.storage.setStep('login');
+          } else {
+            this.rootPage = nextPage;
+          }
+        });
+      } else {
+        this.rootPage = nextPage;
+      }
     });
   }
 
